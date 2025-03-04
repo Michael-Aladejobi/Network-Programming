@@ -1,5 +1,24 @@
-print('hello from server00.py')
-
 import socket
 
-ss
+ss = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
+
+print('Server Start: ')
+
+port = 9000
+ip = '127.0.0.1'
+
+ss.bind((ip,port))
+
+ss.listen(2)
+
+# to receive from client
+con, addr = ss.accept()
+
+print('Address Client Connected {} and port no {}'.format(addr[0], addr[1]))
+
+data = con.recv(1024)
+print('Data received from client: ', data.decode('ascii'))
+
+con.close()
+ss.close()
+print('Server closed')
