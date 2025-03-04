@@ -14,7 +14,7 @@ ss.listen(2)
 # to receive from client
 con, addr = ss.accept()
 
-print('Address Client Connected {} and port no {}'.format(addr[0], addr[1]))
+print('Address Client Connected {} and port no. {}'.format(addr[0], addr[1]))
 
 data = con.recv(1024)
 print('Data received from client: ', data.decode('ascii'))
