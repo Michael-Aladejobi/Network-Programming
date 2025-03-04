@@ -11,6 +11,5 @@ cs.connect((ip,port))
 
 msg = input('Enter the message: ')
 cs.sendall(bytes(msg.encode('ascii')))
-print('Message sent to server')
-
+print('Message sent to server...')
 cs.close()
