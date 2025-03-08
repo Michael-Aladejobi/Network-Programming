@@ -10,4 +10,9 @@ ip = '127.0.0.1'
 cs.connect((ip, port))
 
 msg = input('Message to server: ')
-cs.sendall(bytes(msg.encode('ascii')))
+while True:
+    if msg.lower().strip() == 'quit':
+        print('session Ended from client!')
+        break
+    cs.sendall(bytes(msg.encode('ascii')))
+    msg = input('Message to server: ')

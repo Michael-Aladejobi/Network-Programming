@@ -14,7 +14,13 @@ con, addr = ss.accept()
 print('Connected to Address:{0}, Port no.: {1}'.format(addr[0], addr[1]))
 
 data = con.recv(1024)
-print('Message from client before decode: ', data)
 
-data = data.decode()
-print('Message from client after decode: ', data)
+while True:
+    if not data:
+        print('session ended from Server!')
+        break
+    else:
+        data = data.decode()
+        print('Message from client after decode: ', data)
+        data = con.recv(1024)
+
