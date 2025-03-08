@@ -8,3 +8,6 @@ port = 9000
 ip = '127.0.0.1'
 
 cs.connect((ip, port))
+
+msg = input('Message to server: ')
+cs.sendall(bytes(msg.encode('ascii')))
