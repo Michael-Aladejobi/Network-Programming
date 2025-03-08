@@ -1,26 +1,15 @@
 import socket
 
-ss = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
+server_side = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 
-print('Server Start: ')
+print('Server Ready: ')
+
 port = 9000
 ip = '127.0.0.1'
 
-ss.bind((ip, port))
-ss.listen()
+server_side.bind((ip, port))
+server_side.listen(1)
 
-con, addr = ss.accept()
+con, addr =  server_side.accept()
 
-print('Connected to Address:{0}, Port no.: {1}'.format(addr[0], addr[1]))
-
-data = con.recv(1024)
-
-while True:
-    if not data:
-        print('session ended from Server!')
-        break
-    else:
-        data = data.decode()
-        print('Message from client after decode: ', data)
-        data = con.recv(1024)
-
+print('Address clien connected {0} and port no. {1}'. format(addr[0], addr[1]))
