@@ -19,3 +19,15 @@ print('Address clien connected {0} and port no. {1}'. format(addr[0], addr[1]))
 
 # data = data.decode()
 # print('Message from client after decode', data)
+
+data = con.recv(1024)
+while True:
+    if not data:
+        print('Session ended by Client!')
+        break
+    else:
+        print("Message from client before decoding: ", data)
+
+        data = data.decode()
+        print('Message from client after decoding: ', data)
+        data = con.recv(1024)
