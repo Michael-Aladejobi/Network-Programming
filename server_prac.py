@@ -1,22 +1,14 @@
 import socket
 
-server_side = socket.socket(family=socket.AF_NET, type=socket.SOCK_STREAM)
+ss = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 
-print("Server Ready: ")
-
+print('Server Start: ')
 port = 9000
 ip = '127.0.0.1'
 
-server_side.bind((ip, port))
+ss.bind((ip, port))
+ss.listen()
 
-server_side.listen(5)
+con, addr = ss.accept()
 
-con, addr = server_side.accept()
-
-print('Address: {0} , port:{1}'.format(addr[0], addr[1]))
-
-data = con.recv(1024)
-print('msg from client before decoding...' , data)
-
-data = data.decode()
-print('msgh from client after decoding', data)
+print('Connected to Address:{0}, Port no.: {1}'.format(addr[0], addr[1]))
