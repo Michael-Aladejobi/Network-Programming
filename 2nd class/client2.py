@@ -5,5 +5,9 @@ print("Client Start: ")
 
 
 host = socket.gethostname()
-port = 9000
+port = 9500
 cs.connect((host, port))
+
+# sending msg to server using TCP 
+msg = input('message to server: ')
+cs.sendall(bytes(msg.encode('ascii')))

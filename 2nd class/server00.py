@@ -6,15 +6,22 @@ import os
 
 th = 0 #counter var
 
+# def func(c):
+#     pass
+
 def func(c):
-    pass
+    data = c.recv(1024).decode()
+    print('message from client : ', data)
+    
 
 ss = socket.socket(family=socket.AF_INET, type = socket.SOCK_STREAM)
 print("Start Server: ")
 
 
 host = socket.gethostname()
-port = 9000
+# port = 9000 when no msg from client
+port = 9500 
+
 ss.bind((host , port))
 ss.listen(5)
 
