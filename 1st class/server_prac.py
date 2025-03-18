@@ -12,6 +12,7 @@ ss.listen(2)
 
 con1, addr1 = ss.accept()
 con2, addr2 = ss.accept()
+# process and thred
 
 print('Connected to address: {0}, port no.: {1}'.format(addr1[0], addr1[1]))
 print('Connected to address: {0}, port no.: {1}'.format(addr2[0], addr2[1]))
