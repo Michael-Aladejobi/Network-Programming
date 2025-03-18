@@ -5,4 +5,5 @@ print("Client Start: ")
 
 
 host = socket.gethostname()
-port = 8500
+port = 9000
+cs.connect((host, port))
