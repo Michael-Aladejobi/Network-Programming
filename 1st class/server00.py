@@ -4,7 +4,8 @@ import time
 ss = socket.socket(family = socket.AF_INET, type = socket.SOCK_STREAM)
 print('server start: ')
 
-# Assigning port number
+# Assigning port numbers
+
 port = 9001
 ip = '127.0.0.1'
 ss.bind((ip, port))
