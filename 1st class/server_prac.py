@@ -1,4 +1,5 @@
 import socket
+import time
 
 ss = socket.socket(family = socket.AF_INET, type = socket.SOCK_STREAM)
 
@@ -26,5 +27,5 @@ while True:
         break
 
     print('message from client: ', data)
-    msg = input('message to client: ')
+    msg = time.ctime(time.time())
     con.sendall(bytes(msg.encode('ascii')))

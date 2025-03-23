@@ -19,4 +19,4 @@ while msg.lower() != 'quit':
     cs.sendall(bytes(msg.encode('ascii')))
     data = cs.recv(1024).decode()
     print('message from server: ', data)
-    msg = input('message to client: ')
+    msg = input('message to server: ')
