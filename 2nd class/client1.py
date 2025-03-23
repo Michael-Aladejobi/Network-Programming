@@ -1,13 +1,12 @@
 import socket
 
-cs = socket.socket(family = socket.AF_INET, type=socket.SOCK_STREAM)
-print("Client Start: ")
+cs = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 
+print('Client1 start: ')
 
 host = socket.gethostname()
 port = 9500
-cs.connect((host, port))
 
-# sending msg to server using TCP 
-msg = input('message to server: ')
-cs.sendall(bytes(msg.encode('ascii')))
+cs.connect((host, port))
+msg = input('Message to server: ')
+cs.sendall(bytes((msg.encode('ascii'))))
