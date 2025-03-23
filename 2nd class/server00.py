@@ -19,7 +19,6 @@ print("Start Server: ")
 
 
 host = socket.gethostname()
-# port = 9000 when no msg from client
 port = 9500 
 
 ss.bind((host , port))
