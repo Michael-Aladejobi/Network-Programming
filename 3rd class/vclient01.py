@@ -1,32 +1,31 @@
 import socket
 
-cs = socket.socket(family = socket.AF_INET, type = socket.SOCK_STREAM)
 
-print('Client Start: ')
-
+cs = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
+print('Client start: ')
 host = socket.gethostname()
-port = 7500
-
+port = 3000
 cs.connect((host, port))
-
-msg = input('Message to server: ')
-cs.sendall(bytes(msg.encode('ascii')))
+msg = input('message to server : ')
+cs.send(bytes(msg.encode('ascii')))
 
 data = cs.recv(1024).decode()
-print('Message from server: ', data)
+print('message from server : ',data)
 
-msg = input('Message to server: ')
-
+msg = input('message to server : ')
 while msg.lower() != 'bye':
-    cs.sendall(bytes(msg.encode('ascii')))
+
+    cs.send(bytes(msg.encode('ascii')))
 
     data = cs.recv(1024).decode()
-    print('Message from server: ', data)
+    print('message from server : ',data)
 
     data = cs.recv(1024).decode()
-    print('Message from server: ', data)
-
-    msg = input('Message 1 - 9 to server or type bye to quit: ')
-
+    print('message from server : ',data)
+    msg = input('message 1 to 9 to server or type (bye) to quit : ')
 cs.close()
-print('Client close')
+
+
+
+
+
