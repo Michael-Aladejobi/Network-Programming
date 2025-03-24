@@ -1,11 +1,42 @@
 import socket
 from _thread import *
 import os
+import random
 
 th = 0 #Thread counter var
 
+def whoWon(s, c):
+    r = ''
+    if c > s:
+        r = r + ' client won with' + str(c) + ' as against server with ' + str(s)
+    elif c == s:
+        r = r + ' draw : client with ' + str(c) + ' equal sever no with ' + str(s)
+    else:
+          r = r + ' server won with' + str(s) + ' as against client with ' + str(c)
+
+
+def genRandom():
+    x = random.randint(1, 9)
+    return x
+
+
 def fun(ss2):
-    pass
+    data = ss2.recv(1024).decode()
+    print('Message from client: ', data)
+
+    msg = input('Message to client: ')
+    ss2.sendall(bytes(msg.encode('ascii')))
+
+    data = ss2.recv(1024).decode()
+    print('Message from client: ', data)
+    clientNo = int(data)
+
+    #Generate randome number
+    re = genRandom()
+    serverNo = re
+    print('Server no {} and client no {}'.format(serverNo, clientNo ))
+
+    rr = whoWon(serverNo, clientNo)
 
 ss = socket.socket(family = socket.AF_INET, type = socket.SOCK_STREAM)
 

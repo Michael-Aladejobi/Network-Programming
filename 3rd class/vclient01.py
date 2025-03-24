@@ -11,3 +11,9 @@ cs.connect((host, port))
 
 msg = input('Message to server: ')
 cs.sendall(bytes(msg.encode('ascii')))
+
+data = cs.recv(1024).decode()
+print('Message from server: ', data)
+
+msg = input('Message to server: ')
+cs.sendall(bytes(msg.encode('ascii')))
