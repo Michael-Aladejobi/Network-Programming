@@ -1,6 +1,6 @@
 import socket
 
-ss = socket.socket( family = socket.AT_INET, type = socket.SOCK_DGRAM)
+ss = socket.socket( family = socket.AF_INET, type = socket.SOCK_DGRAM)
 
 
 print('Server Start: ')
@@ -14,4 +14,16 @@ ss.bind((host, port))
 #UDP recev from and send to
 con, addr = ss.recvfrom(1024)
 
-print('Add')
+print('Address client connected %s: ' % str(addr))
+print('Message from client before decoding: ',  con)
+
+data = con.decode()
+print('Message from client after decoding:', data)
+
+msg = input('Message to client--->: ')
+msg = str.encode(msg)
+ss.sendto(msg, (addr))
+
+con, addr = ss.recvfrom(1024)
+data = con.decode()
+print('Message from client after decoding: ', data)
