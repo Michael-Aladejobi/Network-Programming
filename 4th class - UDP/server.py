@@ -1,29 +1,52 @@
 import socket
+import calendar
 
-ss = socket.socket( family = socket.AF_INET, type = socket.SOCK_DGRAM)
+def weekday(y, m, d):
+  re = 'weekday of birthday '
+  wkd = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  x = calendar.weekday(y, m, d)
+  r = wkd[x]
+  re = f'{re} of year {str(y)} month {str(m)} day {str(d)} is {r}'
+  return re
 
+ss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+print("Server Start")
 
-print('Server Start: ')
-
-host = '127.0.0.1'
+host = "127.0.0.1"
 port = 7500
 
-#UDP doesnt listen and doesnt , hence...
 ss.bind((host, port))
 
-#UDP recev from and send to
 con, addr = ss.recvfrom(1024)
-
-print('Address client connected %s: ' % str(addr))
-print('Message from client before decoding: ',  con)
+print(f"Client Joined: {addr}")
+# print(f"Message before decoding: {con}")
 
 data = con.decode()
-print('Message from client after decoding:', data)
+# print(f"Message after decoding: {data}")
+print(f"Message from client: {data}\n")
 
-msg = input('Message to client--->: ')
+msg = input("Message to client: ")
 msg = str.encode(msg)
-ss.sendto(msg, (addr))
+ss.sendto(msg, addr)
 
 con, addr = ss.recvfrom(1024)
-data = con.decode()
-print('Message from client after decoding: ', data)
+while True:
+  data = con.decode()
+  if not data:
+    print(f"End of operation")
+    break
+
+  if data == "bye":
+    print(f"End of operation")
+    break
+
+  print(f"Message from client: {data}\n")
+  data = data.split(" ")
+  yr = int(data[0])
+  mm = int(data[1])
+  dd = int(data[2])
+
+  res = weekday(yr, mm, dd)
+  msg = str.encode(res)
+  ss.sendto(msg, addr)
+  break

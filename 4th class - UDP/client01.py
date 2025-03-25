@@ -1,21 +1,26 @@
 import socket
 
-cs = socket.socket( family = socket.AF_INET, type = socket.SOCK_DGRAM)
+cs = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+print("Client Start")
 
-
-print('Client Start: ')
-
-host = '127.0.0.1'
+host = "127.0.0.1"
 port = 7500
 
-msg = input('Message to server--->: ')
+msg = input("message to server: ")
 msg = str.encode(msg)
-cs.sendto(msg, (host, port))
+cs.sendto(msg, (host,port))
 
 con, addr = cs.recvfrom(1024)
-data = con.decode()
-print('Message from server after decoding:', data)
 
-msg = input('Message to server--->: ')
-msg = str.encode(msg)
-cs.sendto(msg, (addr))
+data = con.decode()
+print(f"Message from server: {data}")
+
+msg = input("Enter your birthdate, bye to exit: ")
+while msg.lower().strip() != 'bye':
+  msg = str.encode(msg)
+  cs.sendto(msg, (host,port))
+
+  con, addr = cs.recvfrom(1024)
+
+  data = con.decode()
+  print(f"Message from server: {data}")
