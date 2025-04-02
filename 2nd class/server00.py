@@ -6,8 +6,6 @@ import os
 
 th = 0 #counter var
 
-# def func(c):
-#     pass
 
 def func(c):
     data = c.recv(1024).decode()
