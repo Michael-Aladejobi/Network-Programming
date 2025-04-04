@@ -2,20 +2,18 @@ import socket
 from _thread import *
 import os
 
-th = 0 #thread counter initailized
+th = 0 #thread counter
 
 def func(c):
     data = c.recv(1024).decode()
-    print('message from client: ', data)
-
+    print('meaasage from client: ', data)
 
 ss = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 
 print('server start: ')
 
-
 host = socket.gethostname()
-port = 6500
+port = 7000
 
 ss.bind((host, port))
 ss.listen(5)
@@ -26,6 +24,6 @@ while True:
 
     start_new_thread(func, (con,))
     th = th + 1
-    print('thread no: ', th)
+    print('thread no.: ', th)
 
     print('process id: {}'.format(os.getpid()))
