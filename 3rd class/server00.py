@@ -30,16 +30,16 @@ def genRandom():
     return x
 
 
-def fun(ss2):
-    data = ss2.recv(1024).decode()
+def fun(con):
+    data = con.recv(1024).decode()
     print('message from client : ',data)
 
     msg = input('message to client : ')
-    ss2.send(bytes(msg.encode('ascii')))
+    con.send(bytes(msg.encode('ascii')))
 
     while True:
 
-        data = ss2.recv(1024).decode()
+        data = con.recv(1024).decode()
         print('message from client : ', data)
         if not data:
             print('end game ')
@@ -51,10 +51,10 @@ def fun(ss2):
         print('server no {0} and client no {1} '.format(serNo,cliNo ))
         rr = whoWon(serNo, cliNo)
         print('message to client ',rr)
-        ss2.send(bytes(rr.encode('ascii')))
+        con.send(bytes(rr.encode('ascii')))
 
         xx = stat()
-        ss2.send(bytes(xx.encode('ascii')))
+        con.send(bytes(xx.encode('ascii')))
 
 ss = socket.socket(family = socket.AF_INET, type = socket.SOCK_STREAM)
 print('server start: ')
@@ -63,8 +63,8 @@ port = 3000
 ss.bind((host, port))
 ss.listen(4)
 while True:
-    ss2, addr = ss.accept()
+    con, addr = ss.accept()
     print('address client {0} and port no {1}'.format(addr[0], addr[1]))
-    start_new_thread(fun, (ss2,))
+    start_new_thread(fun, (con,))
     th = th + 1
     print('thread no {0} and process id {1}'.format(th, os.getpid()))
