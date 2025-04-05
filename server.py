@@ -33,4 +33,22 @@ def getRandom():
 def func(con):
     data = con.recv(1024).decode()
     print('message to client: ', data)
-    
+
+    msg = input('message to cient: ')
+    con.senall(bytes(msg.encode('ascii')))
+
+    while True:
+        data = con.recv(1024).decode()
+        if not data:
+            print('game ended!')
+            break
+        clientNo = int(data)
+        serverNo = getRandom()
+
+        res = whoWon(clientNo, serverNo)
+        print(res)
+        con.sendall(bytes(res.encode('ascii')))
+
+        stats = stat()
+        print(stats)
+        con.sendall(bytes(stats.encode('ascii')))
