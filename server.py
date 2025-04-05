@@ -9,20 +9,21 @@ ca = 0
 da = 0
 
 def stat():
-    res = "statistical analysis:  "
-    res = res + ' server won with ' + str(sa) + ' client won with '+ str(ca)
+    res = 'statistical result: '
+    res = res + ' server win with ' + str(sa) + " client wins with " + str(ca) + ' game draw with ' + str(da)
     return res
 
 def whoWon(s, c):
-    res = " "
+    res = ' '
     if s > c:
-        res = 'server won with ' + str(s) +' as against client with ' + str(c)
+        res = res + 'server won with ' + str(s) + ' as against client ' + str(c)
         sa = sa + 1
     elif s == c:
-        res = ' draw: ' + ' server score ' + str(s) + ' client score ' + str(c)
+        res = res + " draw: " + 'server with ' + str(s) + " cleint with " + str(c)
         da = da + 1
     else:
-        res = 'client won with ' + str(c) +' as against server with ' + str(s)
+        res = res + ' client won with ' + str(c) + ' as against server ' + str(s)
+        ca = ca + 1
     return res
 
 def getRandom():
@@ -31,4 +32,5 @@ def getRandom():
 
 def func(con):
     data = con.recv(1024).decode()
-    print('message from client: ', data)
+    print('message to client: ', data)
+    
