@@ -14,6 +14,7 @@ def stat():
     return res
 
 def whoWon(s, c):
+    global sa, ca, da
     res = ' '
     if s > c:
         res = res + 'server won with ' + str(s) + ' as against client ' + str(c)
@@ -35,7 +36,7 @@ def func(con):
     print('message to client: ', data)
 
     msg = input('message to cient: ')
-    con.senall(bytes(msg.encode('ascii')))
+    con.sendall(bytes(msg.encode('ascii')))
 
     while True:
         data = con.recv(1024).decode()
@@ -44,11 +45,32 @@ def func(con):
             break
         clientNo = int(data)
         serverNo = getRandom()
+        print('server no: {0}, client: {1}'.format(serverNo, clientNo))
 
         res = whoWon(clientNo, serverNo)
-        print(res)
+        print("message to client: ", res)
         con.sendall(bytes(res.encode('ascii')))
 
         stats = stat()
         print(stats)
         con.sendall(bytes(stats.encode('ascii')))
+
+
+ss= socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
+
+print('server start: ')
+
+host = socket.gethostname()
+port = 6000
+
+ss.bind((host, port))
+ss.listen(5)
+
+while True:
+    con, addr = ss.accept()
+    print('Connected to addr {0}, port no. {1}'.format(addr[0], addr[1]))
+    start_new_thread(func, (con,))
+    th = th + 1
+    print('thread no: ', th)
+
+    print('process id: '.format(os.getpid()))
