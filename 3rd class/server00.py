@@ -12,6 +12,7 @@ def stat():
     re = re+' server won with '+str(sa)+' client won with '+str(ca)+'  game draw with '+str(da)
     return re
 
+
 def whoWon(s, c):
     global sa, ca, da
     r = ''
