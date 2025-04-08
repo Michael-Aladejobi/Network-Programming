@@ -4,7 +4,7 @@ import socket
 cs = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 print('Client start: ')
 host = socket.gethostname()
-port = 3000
+port = 9999
 cs.connect((host, port))
 msg = input('message to server : ')
 cs.send(bytes(msg.encode('ascii')))
