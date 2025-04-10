@@ -8,7 +8,7 @@ port = 9999
 
 cs.connect((host, port))
 
-data = cs.recv(1024).decode()  # Receive the welcome message from the server
+data = cs.recv(1024).decode()  
 print('message from server: ', data)
 
 msg = input('message to server: ')
