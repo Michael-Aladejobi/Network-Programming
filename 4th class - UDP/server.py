@@ -29,8 +29,8 @@ msg = input("Message to client: ")
 msg = str.encode(msg)
 ss.sendto(msg, addr)
 
-con, addr = ss.recvfrom(1024)
 while True:
+  con, addr = ss.recvfrom(1024)
   data = con.decode()
   if not data:
     print(f"End of operation")
@@ -49,4 +49,3 @@ while True:
   res = weekday(yr, mm, dd)
   msg = str.encode(res)
   ss.sendto(msg, addr)
-  break

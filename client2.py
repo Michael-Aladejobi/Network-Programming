@@ -15,12 +15,20 @@ con, addr = cs.recvfrom(1024)
 data = con.decode()
 print(f"Message from server: {data}")
 
-while msg.lower().strip() != 'bye':
-  msg = input("Enter your birthdate, bye to exit: ")
-  msg = str.encode(msg)
-  cs.sendto(msg, (host,port))
+
+msg = input("Enter your birthdate, bye to exit: ")
+
+msg = str.encode(msg)
+cs.sendto(msg, (host,port))
+status = ""
+while status != 'bye':
 
   con, addr = cs.recvfrom(1024)
 
   data = con.decode()
   print(f"Message from server: {data}")
+  
+  msg = input("Enter your birthdate, bye to exit: ")
+  status = msg
+  msg = str.encode(msg)
+  cs.sendto(msg, (host,port))
