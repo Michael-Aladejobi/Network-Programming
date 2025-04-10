@@ -6,21 +6,19 @@ import random
 th = 0
 
 def get_treasure():
-    """Initialize and return the treasure's position."""
-    return random.randint(1, 50)
+    res = random.randint(1, 50)
+    return res
 
 def move_treasure(treasure):
-    """Move the treasure slightly."""
     if treasure == 1:
-        treasure += 1
+        treasure = treasure + 1
     elif treasure == 50:
-        treasure -= 1
+        treasure = treasure - 1
     else:
-        treasure += random.choice([-1, 1])
+        treasure = treasure + random.choice([-1, 1])
     return treasure
 
 def hot_or_cold(treasure, guess):
-    """Determine if the guess is 'Hot' or 'Cold'."""
     distance = abs(treasure - guess)
     if distance <= 5:
         return "Hot (close)"
@@ -55,7 +53,7 @@ def func(con):
             print("Client found the treasure!")
             break
 
-        treasure = move_treasure(treasure)  # Move the treasure slightly
+        treasure = move_treasure(treasure)  
         print(f"Treasure moved to: {treasure}")
 
     con.close()
