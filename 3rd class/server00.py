@@ -20,7 +20,7 @@ def whoWon(s, c):
         r = r +' client won with '+str(c)+' as against server with  '+str(s)
         ca = ca + 1
     elif c == s:
-        r = r+' draw : client with '+str(c)+' equal server no with  '+str(s)
+        r = r +' draw : client with '+str(c)+' equal server no with  '+str(s)
         da = da + 1
     else:
         r = r + ' server won with ' + str(s) + ' as against client with  ' + str(c)
