@@ -9,7 +9,7 @@ ca = 0
 da = 0
 def stat():
     re = 'statistical analysis :  '
-    re = re+' server won with '+str(sa)+' client won with '+str(ca)+'  game draw with '+str(da)
+    re = re +' server won with '+str(sa)+' client won with '+str(ca)+'  game draw with '+str(da)
     return re
 
 
@@ -17,7 +17,7 @@ def whoWon(s, c):
     global sa, ca, da
     r = ''
     if c > s:
-        r = r+' client won with '+str(c)+' as against server with  '+str(s)
+        r = r +' client won with '+str(c)+' as against server with  '+str(s)
         ca = ca + 1
     elif c == s:
         r = r+' draw : client with '+str(c)+' equal server no with  '+str(s)

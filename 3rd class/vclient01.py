@@ -24,8 +24,3 @@ while msg.lower() != 'bye':
     print('message from server : ',data)
     msg = input('message 1 to 9 to server or type (bye) to quit : ')
 cs.close()
-
-
-
-
-
