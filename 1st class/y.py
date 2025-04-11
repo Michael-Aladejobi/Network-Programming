@@ -10,5 +10,5 @@ ip = '127.0.0.1'
 
 client_socket.connect((ip, port))
 
-msg = input('Message to server: ')
+msg = input('Message to server-->: ')
 client_socket.sendall(bytes(msg.encode()))
