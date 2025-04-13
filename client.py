@@ -4,7 +4,7 @@ cs = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 print('client start: ')
 
 host = socket.gethostname()
-port = 9999
+port = 9000
 
 cs.connect((host, port))
 
@@ -24,6 +24,7 @@ while True:
 
         msg = input('message to server or type (bye) to quit: ')
     else:
+        
         print('proces terminated!')
         break
 
