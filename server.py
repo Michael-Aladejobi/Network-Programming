@@ -1,5 +1,5 @@
 import socket
-from _thread import *
+from _thread import*
 import os
 import random
 
@@ -7,71 +7,65 @@ th = 0
 sa = 0
 ca = 0
 da = 0
-
-def getRandom():
-    res = random.randint(1,10)
-    return res
-
 def stat():
-    global sa, ca, da
-    res = ""
-    res = res + 'server won with ' + str(sa) + " client won with " + str(ca) + ': draw with ' + str(da)
-    return res
+    re = 'statistical analysis :  '
+    re = re +' server won with '+str(sa)+' client won with '+str(ca)+'  game draw with '+str(da)
+    return re
+
 
 def whoWon(s, c):
     global sa, ca, da
-    res = ''
+    r = ''
     if c > s:
-        res = res + 'cleint won with' + str(c) +' as agaist server with ' + str(s) 
-        ca = ca + 1 
+        r = r +' client won with '+str(c)+' as against server with  '+str(s)
+        ca = ca + 1
     elif c == s:
-        res = res + ' Draw: client with ' + str(c) +' server with ' + str(s)
+        r = r +' draw : client with '+str(c)+' equal server no with  '+str(s)
         da = da + 1
     else:
-        res = res + 'server won with' + str(s) +' as agaist client with ' + str(c)
-    return res
+        r = r + ' server won with ' + str(s) + ' as against client with  ' + str(c)
+        sa = sa + 1
+    return r
+def genRandom():
+    x = random.randint(1, 9)
+    return x
 
-def func(con):
-    data = con.recv(1024).decode() 
-    print('message from client: ', data)
 
-    msg = input('message to client: ')
-    con.sendall(bytes(msg.encode('ascii')))
+def fun(con):
+    data = con.recv(1024).decode()
+    print('message from client : ',data)
+
+    msg = input('message to client : ')
+    con.send(bytes(msg.encode('ascii')))
 
     while True:
+
         data = con.recv(1024).decode()
+        print('message from client : ', data)
         if not data:
-            print('game ended')
+            print('end game ')
             break
-        clientNo = int(data)
-        serverNo = getRandom()
+        cliNo = int(data)
 
-        res = whoWon(clientNo, serverNo)
-        print(res)
-        con.sendall(bytes(res.encode()))
+        re = genRandom()
+        serNo = re
+        print('server no {0} and client no {1} '.format(serNo,cliNo ))
+        rr = whoWon(serNo, cliNo)
+        print('message to client ',rr)
+        con.send(bytes(rr.encode('ascii')))
 
-        stats = stat()
-        print(stats)
-        con.sendall(bytes(stats.encode()))
+        xx = stat()
+        con.send(bytes(xx.encode('ascii')))
 
 ss = socket.socket(family = socket.AF_INET, type = socket.SOCK_STREAM)
-
-print('Server Start: ')
-
+print('server start: ')
 host = socket.gethostname()
-port = 9999
-
+port = 9000
 ss.bind((host, port))
-ss.listen(5)
-
+ss.listen(4)
 while True:
     con, addr = ss.accept()
-    print('Connected to addr {0}, port no. {1}'.format(addr[0], addr[1]))
-
-    start_new_thread(func, (con,))
+    print('address client {0} and port no {1}'.format(addr[0], addr[1]))
+    start_new_thread(fun, (con,))
     th = th + 1
-    print('thread no: ', th)
-
-    print('process id:'.format(os.getpid()) )
-
-ss.close()
+    print('thread no {0} and process id {1}'.format(th, os.getpid()))
