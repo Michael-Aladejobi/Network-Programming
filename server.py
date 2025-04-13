@@ -1,6 +1,16 @@
 import socket
+import calendar
 
-ss = socket.socket(family=socket.AF_INT, type = socket.SOCK_DGRAM)
+def weekday(y, m, d):
+    weekday = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frieday', 'Saturday', 'Sunday']
+
+    x = calendar.weekday(y, m, d)
+    z = weekday[x]
+
+    res = "Weekday of "  + str(y) + ',' + str(m) + ',' + str(d) + ' is: ' + str(z)
+    return res
+
+ss = socket.socket(family=socket.AF_INET, type = socket.SOCK_DGRAM)
 print('server start: ')
 
 host = socket.gethostname()
@@ -12,12 +22,12 @@ con,addr = ss.recvfrom(1024)
 data = con.decode()
 print('message from client: ', data)
 
-msg = input('message to client: ')
+msg = input('message to client to enter yy,mm,dd: ')
 msg = str.encode(msg)
 ss.sendto(msg, (addr))
 
 while True:
-    con, addr = ss.recvfrom()
+    con, addr = ss.recvfrom(1024)
     data = con.decode()
     if not data:
         print('session ended')
@@ -25,9 +35,13 @@ while True:
     if data.lower().strip() == 'bye':
         print('session terminated')
         break
-    print('message from client: ')
+    
+    data = data.split(',')
+    yy = int(data[0])
+    mm = int(data[1])
+    dd = int(data[2])
 
-    msg = input('message to server: ')
+    msg = weekday(yy, mm, dd)
     msg = str.encode(msg)
     ss.sendto(msg, (addr))
 

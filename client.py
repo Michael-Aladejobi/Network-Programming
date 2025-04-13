@@ -1,5 +1,5 @@
 import socket
-cs = socket.socket(family=socket.AF_INEt, type = socket.SOCK_DGRAM)
+cs = socket.socket(family=socket.AF_INET, type = socket.SOCK_DGRAM)
 print('cleint start: ')
 
 host = socket.gethostname()
@@ -20,13 +20,12 @@ while True:
         cs.sendto(msg, (host, port))
 
         con, addr = cs.recvfrom(1024)
-        data = con.dedcode()
+        data = con.decode()
         print('message from server: ', data)
     else:
         print('session ended')
         break
     msg = input('message to server: ')
-    msg = str.encode(msg)
-    cs.sendto(msg, (host, port))
+    
 
 cs.close()
