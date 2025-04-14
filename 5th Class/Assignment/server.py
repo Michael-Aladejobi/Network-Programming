@@ -29,16 +29,99 @@ def lcm1(a, b):
 
 def opera(num1, op1, num2, op2, num3):
     re = ''
-    if op1 == '+':
+
+    #    FOCUSED ON OP1 ADDITION
+    if op1 == '+' and op2 == '+':
         sum = num1 + num2 + num3
         re = re+' '+str(num1)+' + '+str(num2)+' + '+str(num3)+' is '+str(sum)
-    elif op1 == '*':
+    elif op1 == '+' and op2 == '-':
+        sum = num1 + num2 - num3
+        re = re+' '+str(num1)+' + '+str(num2)+' - '+str(num3)+' is '+str(sum)
+    elif op1 == '+' and op2 == '*':
+        sum = num1 + num2 * num3
+        re = re+' '+str(num1)+' + '+str(num2)+' * '+str(num3)+' is '+str(sum)
+    elif op1 == '+' and op2 == '/':
+        sum = num1 + num2 * num3
+        re = re+' '+str(num1)+' + '+str(num2)+' * '+str(num3)+' is '+str(sum)
+    elif op1 == '+' and op2 == '%':
+        sum = num1 + num2 % num3
+        re = re+' '+str(num1)+' + '+str(num2)+' % '+str(num3)+' is '+str(sum)
+
+#    FOCUSED ON OP1 SUBTRACTION
+    elif op1 == '-' and op2 == '-':
+        sum = num1 - num2 - num3
+        re = re+' '+str(num1)+' - '+str(num2)+' - '+str(num3)+' is '+str(sum)
+    elif op1 == '-' and op2 == '+':
+        sum = num1 - num2 + num3
+        re = re+' '+str(num1)+' - '+str(num2)+' + '+str(num3)+' is '+str(sum)
+    elif op1 == '-' and op2 == '*':
+        sum = num1 - num2 * num3
+        re = re+' '+str(num1)+' - '+str(num2)+' * '+str(num3)+' is '+str(sum)
+    elif op1 == '-' and op2 == '/':
+        sum = num1 - num2 / num3
+        re = re+' '+str(num1)+' - '+str(num2)+' / '+str(num3)+' is '+str(sum)
+    elif op1 == '-' and op2 == '%':
+        sum = num1 - num2 % num3
+        re = re+' '+str(num1)+' - '+str(num2)+' % '+str(num3)+' is '+str(sum)
+
+#    FOCUSED ON OP1 MULTIPLICATION
+    elif op1 == '*' and op2 == '-':
+        sum = num1 * num2 - num3
+        re = re+' '+str(num1)+' * '+str(num2)+' - '+str(num3)+' is '+str(sum)
+    elif op1 == '*' and op2 == '+':
+        sum = num1 * num2 + num3
+        re = re+' '+str(num1)+' * '+str(num2)+' + '+str(num3)+' is '+str(sum)
+    elif op1 == '*' and op2 == '*':
         sum = num1 * num2 * num3
         re = re+' '+str(num1)+' * '+str(num2)+' * '+str(num3)+' is '+str(sum)
+    elif op1 == '*' and op2 == '/':
+        sum = num1 * num2 / num3
+        re = re+' '+str(num1)+' * '+str(num2)+' / '+str(num3)+' is '+str(sum)
+    elif op1 == '*' and op2 == '%':
+        sum = num1 * num2 % num3
+        re = re+' '+str(num1)+' * '+str(num2)+' % '+str(num3)+' is '+str(sum)
+
+#    FOCUSED ON OP1 DIVISION
+    elif op1 == '/' and op2 == '-':
+        sum = num1 / num2 - num3
+        re = re+' '+str(num1)+' / '+str(num2)+' - '+str(num3)+' is '+str(sum)
+    elif op1 == '/' and op2 == '+':
+        sum = num1 / num2 + num3
+        re = re+' '+str(num1)+' / '+str(num2)+' + '+str(num3)+' is '+str(sum)
+    elif op1 == '/' and op2 == '*':
+        sum = num1 / num2 * num3
+        re = re+' '+str(num1)+' / '+str(num2)+' * '+str(num3)+' is '+str(sum)
+    elif op1 == '/' and op2 == '/':
+        sum = num1 / num2 / num3
+        re = re+' '+str(num1)+' / '+str(num2)+' / '+str(num3)+' is '+str(sum)
+    elif op1 == '/' and op2 == '%':
+        sum = num1 * num2 % num3
+        re = re+' '+str(num1)+' / '+str(num2)+' % '+str(num3)+' is '+str(sum)
+
+#    FOCUSED ON OP1 MODULUS
+    elif op1 == '%' and op2 == '-':
+        sum = num1 % num2 - num3
+        re = re+' '+str(num1)+' % '+str(num2)+' - '+str(num3)+' is '+str(sum)
+    elif op1 == '%' and op2 == '+':
+        sum = num1 % num2 + num3
+        re = re+' '+str(num1)+' % '+str(num2)+' + '+str(num3)+' is '+str(sum)
+    elif op1 == '/' and op2 == '*':
+        sum = num1 % num2 * num3
+        re = re+' '+str(num1)+' % '+str(num2)+' * '+str(num3)+' is '+str(sum)
+    elif op1 == '%' and op2 == '/':
+        sum = num1 % num2 / num3
+        re = re+' '+str(num1)+' / '+str(num2)+' / '+str(num3)+' is '+str(sum)
+    elif op1 == '%' and op2 == '%':
+        sum = num1 % num2 % num3
+        re = re+' '+str(num1)+' % '+str(num2)+' % '+str(num3)+' is '+str(sum)
+    
+#   FOCUSED ON LCM & HCF
     elif op1 == 'l':
         rr = lcm1(num1, num2)
         ra = lcm1(rr, num3)
         re = re+' lcm  '+str(num1)+' l '+str(num2)+' l '+str(num3)+' is '+str(ra)
+
+#   FOCUSED ON LCM & HCF
     elif op1 == 'm':
         k = mak(num1, num2, num3)
         re = re + ' maximum ' + str(num1) + ' l ' + str(num2) + ' l ' + str(num3) + ' is ' + str(k)
@@ -63,25 +146,31 @@ msg = input('message to client---->  ')
 msg = str.encode(msg)
 ss.sendto(msg, (addr))
 
-con, addr = ss.recvfrom(1024)
-print('mssage bf decoding ', con)
-data = con.decode()
-print('message after decoding ',data)
-data = data.split()
-print('message after spliting : ', data)
-num1 = int(data[0])
-op1 = data[1]
-num2 = int(data[2])
-op2 = data[3]
-num3 = int(data[4])
-sum = num1 + num2 + num3
-print('addition of number sent by client is ', sum)
-res = opera(num1, op1, num2, op2, num3)
-msg = str.encode(res)
-print('message to client on request ',msg)
-ss.sendto(msg, (addr))
+while True:
+    con, addr = ss.recvfrom(1024)
+    print('mssage bf decoding ', con)
+    data = con.decode()
 
+    if not data:
+        print('session ended!')
+        break
+    if data.lower().strip() == 'bye':
+        print('session ended by client!')
+        break
 
+    print('message after decoding ',data)
+    data = data.split()
+    print('message after spliting : ', data)
+    num1 = int(data[0])
+    op1 = data[1]
+    num2 = int(data[2])
+    op2 = data[3]
+    num3 = int(data[4])
+    sum = num1 + num2 + num3
+    print('addition of number sent by client is ', sum)
+    res = opera(num1, op1, num2, op2, num3)
+    msg = str.encode(res)
+    print('message to client on request ',msg)
+    ss.sendto(msg, (addr))
 
-
-
+ss.close()
