@@ -1,5 +1,6 @@
 import socket
 
+
 def mak(num1, num2, num3):
     if num1 > num2:
         larger = num1
@@ -30,7 +31,7 @@ def lcm1(a, b):
 def opera(num1, op1, num2, op2, num3):
     re = ''
 
-    #    FOCUSED ON OP1 ADDITION
+    #    FOCUSED ON OP1 (ADDITION)
     if op1 == '+' and op2 == '+':
         sum = num1 + num2 + num3
         re = re+' '+str(num1)+' + '+str(num2)+' + '+str(num3)+' is '+str(sum)
@@ -47,7 +48,7 @@ def opera(num1, op1, num2, op2, num3):
         sum = num1 + num2 % num3
         re = re+' '+str(num1)+' + '+str(num2)+' % '+str(num3)+' is '+str(sum)
 
-#    FOCUSED ON OP1 SUBTRACTION
+#    FOCUSED ON OP1 (SUBTRACTION)
     elif op1 == '-' and op2 == '-':
         sum = num1 - num2 - num3
         re = re+' '+str(num1)+' - '+str(num2)+' - '+str(num3)+' is '+str(sum)
@@ -64,7 +65,7 @@ def opera(num1, op1, num2, op2, num3):
         sum = num1 - num2 % num3
         re = re+' '+str(num1)+' - '+str(num2)+' % '+str(num3)+' is '+str(sum)
 
-#    FOCUSED ON OP1 MULTIPLICATION
+#    FOCUSED ON OP1 (MULTIPLICATION)
     elif op1 == '*' and op2 == '-':
         sum = num1 * num2 - num3
         re = re+' '+str(num1)+' * '+str(num2)+' - '+str(num3)+' is '+str(sum)
@@ -81,7 +82,7 @@ def opera(num1, op1, num2, op2, num3):
         sum = num1 * num2 % num3
         re = re+' '+str(num1)+' * '+str(num2)+' % '+str(num3)+' is '+str(sum)
 
-#    FOCUSED ON OP1 DIVISION
+#    FOCUSED ON OP1 (DIVISION)
     elif op1 == '/' and op2 == '-':
         sum = num1 / num2 - num3
         re = re+' '+str(num1)+' / '+str(num2)+' - '+str(num3)+' is '+str(sum)
@@ -105,7 +106,7 @@ def opera(num1, op1, num2, op2, num3):
     elif op1 == '%' and op2 == '+':
         sum = num1 % num2 + num3
         re = re+' '+str(num1)+' % '+str(num2)+' + '+str(num3)+' is '+str(sum)
-    elif op1 == '/' and op2 == '*':
+    elif op1 == '%' and op2 == '*':
         sum = num1 % num2 * num3
         re = re+' '+str(num1)+' % '+str(num2)+' * '+str(num3)+' is '+str(sum)
     elif op1 == '%' and op2 == '/':
@@ -114,6 +115,40 @@ def opera(num1, op1, num2, op2, num3):
     elif op1 == '%' and op2 == '%':
         sum = num1 % num2 % num3
         re = re+' '+str(num1)+' % '+str(num2)+' % '+str(num3)+' is '+str(sum)
+
+#    FOCUSED ON OP1 RAISED TO POWER
+    elif op1 == '**' and op2 == '-':
+        sum = (num1 ** num2) - num3
+        re = re+' '+str(num1)+' ** '+str(num2)+' - '+str(num3)+' is '+str(sum)
+    elif op1 == '**' and op2 == '+':
+        sum = (num1 ** num2) + num3
+        re = re+' '+str(num1)+' ** '+str(num2)+' + '+str(num3)+' is '+str(sum)
+    elif op1 == '**' and op2 == '*':
+        sum = (num1 ** num2) * num3
+        re = re+' '+str(num1)+' ** '+str(num2)+' * '+str(num3)+' is '+str(sum)
+    elif op1 == '**' and op2 == '/':
+        sum = (num1 ** num2) / num3
+        re = re+' '+str(num1)+' ** '+str(num2)+' / '+str(num3)+' is '+str(sum)
+    elif op1 == '**' and op2 == '%':
+        sum = (num1 ** num2) % num3
+        re = re+' '+str(num1)+' ** '+str(num2)+' % '+str(num3)+' is '+str(sum)
+
+#    FOCUSED ON OP2 RAISED TO POWER
+    elif op1 == '-' and op2 == '**':
+        sum = num1 - (num2 ** num3)
+        re = re+' '+str(num1)+' - '+str(num2)+' ** '+str(num3)+' is '+str(sum)
+    elif op1 == '+' and op2 == '**':
+        sum = num1 + (num2 ** num3)
+        re = re+' '+str(num1)+' + '+str(num2)+' ** '+str(num3)+' is '+str(sum)
+    elif op1 == '*' and op2 == '**':
+        sum = num1 * (num2 ** num3)
+        re = re+' '+str(num1)+' * '+str(num2)+' ** '+str(num3)+' is '+str(sum)
+    elif op1 == '/' and op2 == '**':
+        sum = num1 / num2 ** num3
+        re = re+' '+str(num1)+' / '+str(num2)+' ** '+str(num3)+' is '+str(sum)
+    elif op1 == '%' and op2 == '**':
+        sum = num1 % (num2 ** num3)
+        re = re+' '+str(num1)+' % '+str(num2)+' ** '+str(num3)+' is '+str(sum)
     
 #   FOCUSED ON LCM & HCF
     elif op1 == 'l':
@@ -124,10 +159,9 @@ def opera(num1, op1, num2, op2, num3):
 #   FOCUSED ON LCM & HCF
     elif op1 == 'm':
         k = mak(num1, num2, num3)
-        re = re + ' maximum ' + str(num1) + ' l ' + str(num2) + ' l ' + str(num3) + ' is ' + str(k)
+        re = re + ' maximum ' + str(num1) + ' m ' + str(num2) + ' m ' + str(num3) + ' is ' + str(k)
 
     return re
-
 
 
 ss = socket.socket(family = socket.AF_INET,type = socket.SOCK_DGRAM)
@@ -161,13 +195,16 @@ while True:
     print('message after decoding ',data)
     data = data.split()
     print('message after spliting : ', data)
+
     num1 = int(data[0])
     op1 = data[1]
     num2 = int(data[2])
     op2 = data[3]
     num3 = int(data[4])
+
     sum = num1 + num2 + num3
     print('addition of number sent by client is ', sum)
+
     res = opera(num1, op1, num2, op2, num3)
     msg = str.encode(res)
     print('message to client on request ',msg)
