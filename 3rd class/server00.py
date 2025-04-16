@@ -68,4 +68,4 @@ while True:
     print('address client {0} and port no {1}'.format(addr[0], addr[1]))
     start_new_thread(fun, (con,))
     th = th + 1
-    print('thread no {0} and process id {1}'.format(th, os.getpid()))
+    print('thread no: {0} and process id {1}'.format(th, os.getpid()))
