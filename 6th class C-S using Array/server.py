@@ -56,7 +56,7 @@ res = operaSD(data_arr, size)
 con.sendall(bytes(res.encode('ascii')))
 
 
-# wehn we press x, it will perform all the operations above
+# wehn we press s, it will perform all the operations above
 # We are performimg 9 more operations
 # when we press m, it should perform mean mode meadian, before we can perform median, we need to sort it
 # client wants to know which serching algorithm is the best, we need to do some sorting algorithm and time it- linear search, binary search and ternary serch
@@ -64,3 +64,4 @@ con.sendall(bytes(res.encode('ascii')))
 # delete, insert, and substitute element
 # list all odd numbers and even numbers on arr
 # you are doing it for TCP, single sever multiple clinet and also UDP
+# Write your GAME AND SHOW ME
