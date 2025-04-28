@@ -1,28 +1,27 @@
-import socket
+import socket 
 
-cs = socket.socket(family = socket.AF_INET, type = socket.SOCK_STREAM)
+cs = socket.socket(family=socket.AF_INET, type = socket.SOCK_STREAM)
+print('client start: ')
 
-print('Client1 Start: ')
+host = '127.0.0.1'
+port = 6000
 
-port = 9000
-ip = '127.0.0.1'
+cs.connect((host, port))
 
-cs.connect((ip, port))
-
-msg = input("Message to server: ")
+msg = input('message to server: ')
 cs.sendall(bytes(msg.encode('ascii')))
 
-data = cs.recv(1024)
-print('Message from server before decode: ', data)
-data = data.decode()
-print('Message from server after decode: ', data)
+data = cs.recv(1024).decode()
+print('message from server: ', data)
 
-msg = input('Message to server: ')
-while msg.lower().strip() != 'bye':
-    cs.sendall(bytes(msg.encode('ascii')))
-    data = cs.recv(1024)
-    print('Messagr from server before decode: ', data)
-    data = data.decode()
-    print('Message from sever after decode: ', data)
-    msg = input('Message to server or type (bye) to quit: ')
-   
+msg = input('message to server: ')
+while True:
+    if msg.lower() != 'bye':
+        cs.sendall(bytes(msg.encode('ascii')))
+
+        data = cs.recv(1024).decode()
+        print('message from server: ',data)
+    else:
+        print('session ended by client!')
+        break
+    msg = input('message to server: ')

@@ -1,31 +1,24 @@
 import socket
 import time
 
-ss = socket.socket(family = socket.AF_INET, type = socket.SOCK_STREAM)
+ss = socket.socket(family=socket.AF_INET, type = socket.SOCK_STREAM)
+print('server start: ')
 
-print('Server Start: ')
-
-port = 9000
 host = '127.0.0.1'
+port = 6000
 
 ss.bind((host, port))
-ss.listen()
-con, addr = ss.accept()
+ss.listen(5)
 
-print("Connected to address {}, port no. {}".format(addr[0], addr[1]))
+con, addr = ss.accept()
+print('Connected to Address: {0}, port no.: {1}'.format(addr[0], addr[1]))
 
 data = con.recv(1024).decode()
-print('message received from client: ', data)
+print('message from server: ', data)
 
 msg = input('message to client: ')
-con.sendall(bytes(msg.encode('ascii')))
+con.sendall(bytes(msg.encode()))
 
+data = con.recv(1024).decode()
 while True:
-    data = con.recv(1024).decode()
-    if not data:
-        print('Session ended by client!')
-        break
-
-    print('message from client: ', data)
-    msg = time.ctime(time.time())
-    con.sendall(bytes(msg.encode('ascii')))
+    if not data
