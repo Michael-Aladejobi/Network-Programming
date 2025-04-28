@@ -24,4 +24,6 @@ while True:
     else:
         print('session ended by client!')
         break
-    msg = input('message to server: ')
+    msg = input('message to server or typr (bye) to quit: ')
+
+cs.close()

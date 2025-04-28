@@ -21,4 +21,18 @@ con.sendall(bytes(msg.encode()))
 
 data = con.recv(1024).decode()
 while True:
-    if not data
+    if not data:
+        print('no data from client!')
+        break
+    if data.lower().strip() == 'bye':
+        print('session ended by client')
+        break
+    print('message from client: ', data)
+
+    msg = time.ctime(time.time())
+    con.sendall(bytes(msg.encode('ascii')))
+    
+
+    data = con.recv(1024)
+
+ss.close()
