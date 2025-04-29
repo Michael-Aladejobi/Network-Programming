@@ -1,67 +1,110 @@
 import socket
+import random
 import pickle
-import math
 
+arr = []
 
-def operaSD(arr, size):
-    sum = 0
-    var = 0 
-    re = ''
-    for i in range(size):
-        sum = sum + arr[i]
-    print('Summation of arr is: ', sum)
+N = 4
+M = 9
 
-    avg = sum / size
-    print('average of arr: ', avg)
+def genArray():
+   
+    for i in range(N):
+        x = random.randint(1, M)
+        arr.append(x)
 
+def genIndex():
+    x = random.randint(0, N-1)
+    return x
 
-    for i in range(size):
-        var = var + ((arr[i] - avg) * (arr[i] - avg))/size
+def genValue():
+    x = random.randint(1, M)
+    return x
 
-    print('variation is :', var)
-    sd = math.sqrt(var)
-    sd = '{0:.2f}'.format(sd) # to 2 decimal placec
-    print('sd is :', sd)
+def pop(arr, N, index, value):
+    if ((index) < 0 or (index > N)):
+        print('Index Error')
+        return False
+    if ((value > arr[index]) or (value < 0)):
+        print('Impossible to subtract less value')
+        return False #[4,3,2,1] - [5, 2 2 1] = error
+    else:
+        arr[index] = arr[index] - value
+        return True
 
-    re = re + 'result ' + ' sum is ' + str(sum) + ' average is ' + str(avg) + ' variation is ' + str(var) + ' SD is ' + str(sd)
-    return re
+def isWinner(arr):
+    return all(x == 0 for x in arr)
 
+ss = socket.socket()
+print('server start: ')
 
-ss = socket.socket(family=socket.AF_INET, type = socket.SOCK_STREAM)
-print('start server: ')
-
-host = socket.gethostname()
-port = 7000
+host = '127.0.0.1'
+port = 7001
 
 ss.bind((host, port))
-ss.listen(2)
+ss.listen(5)
 con, addr = ss.accept()
 
-print(f'Address client IP {addr[0]}, port no, {addr[1]}')
+print(f'Address client {addr[0]} abd port no.: {addr[1]}')
 
 data = con.recv(1024)
-print("message b/f decoding: ", data)
+print('message without decoding: ', data)
 data = data.decode()
 print('message after decoding: ', data)
 
-msg = input('message to client: ')
+msg = input('send index and corresponding value: ')
 con.sendall(bytes(msg.encode('ascii')))
 
-data_arr = con.recv(1024)
-data_arr = pickle.loads(data_arr)
-print('array data from client: ', data_arr)
+genArray()
+print('Array Game: ', arr)
+data_array = pickle.dumps(arr)
+con.send(data_array)
 
-size = len(data_arr)
-res = operaSD(data_arr, size)
-con.sendall(bytes(res.encode('ascii')))
+while True:
+
+    data = con.recv(1024).decode()
+    if data.lower().strip() == 'bye':
+        print('game over')
+        break
+    
+    indexCli = int(data)
+
+    data = con.recv(1024).decode()
+    valueCli = int(data)
+
+    indexSer = genIndex()
+    valueSer = genValue()
+
+    print(f'Client index {indexCli} and value {valueCli}')
+    print(f'Server index {indexSer} and value {valueSer}')
+
+    if pop(arr, N, indexCli, valueCli):
+        print('array game after client deduction: ', arr)
+        data_array = pickle.dumps(arr)
+        con.send(data_array)
+    else:
+        con.send(pickle.dumps(arr))
 
 
-# wehn we press s, it will perform all the operations above
-# We are performimg 9 more operations
-# when we press m, it should perform mean mode meadian, before we can perform median, we need to sort it
-# client wants to know which serching algorithm is the best, we need to do some sorting algorithm and time it- linear search, binary search and ternary serch
-# find the list of prime numbers and non-prime numbers in the arr and send to client
-# delete, insert, and substitute element
-# list all odd numbers and even numbers on arr
-# you are doing it for TCP, single sever multiple clinet and also UDP
-# Write your GAME AND SHOW ME
+    # who is the winner
+    if isWinner(arr):
+        con.send(b'win')
+        print('client has won')
+        break
+
+
+
+
+    if pop(arr, N, indexSer, valueSer):
+        print('array game after client deduction: ', arr)
+        data_array = pickle.dumps(arr)
+        con.send(data_array)
+    else:
+        con.send(pickle.dumps(arr))
+
+
+    # who is the winner
+    if isWinner(arr):
+        con.send(b'win')
+        print('server has won')
+        break
