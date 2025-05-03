@@ -19,10 +19,8 @@ ss.bind((host, port))
 
 con, addr = ss.recvfrom(1024)
 print(f"Client Joined: {addr}")
-# print(f"Message before decoding: {con}")
 
 data = con.decode()
-# print(f"Message after decoding: {data}")
 print(f"Message from client: {data}\n")
 
 msg = input("Message to client: ")
