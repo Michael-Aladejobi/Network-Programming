@@ -1,38 +1,35 @@
 import socket
 import time
 
-ss = socket.socket(family=socket.AF_INET, type = socket.SOCK_STREAM)
-print('server start: ')
+ss = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
+print('Server start: ')
 
-host = '127.0.0.1'
+host = socket.gethostname()
 port = 6000
 
 ss.bind((host, port))
 ss.listen(5)
-
 con, addr = ss.accept()
-print('Connected to Address: {0}, port no.: {1}'.format(addr[0], addr[1]))
 
-data = con.recv(1024).decode()
-print('message from server: ', data)
+print(f'Connected to Addr: {addr[0]}, port no: {addr[1]}')
 
-msg = input('message to client: ')
-con.sendall(bytes(msg.encode()))
+data = con.recv(1024)
+print('data b/f decoding: ', data)
+data = data.decode()
+print('data after decoding: ', data)
 
-data = con.recv(1024).decode()
+msg = input('message to client to request time: ')
+con.sendall(bytes(msg.encode('ascii')))
+
 while True:
-    if not data:
-        print('no data from client!')
+    data = con.recv(1024).decode()
+    if data == 'bye':
+        print('Session ended!')
         break
-    if data.lower().strip() == 'bye':
-        print('session ended by client')
+    if not data:
+        print('Session ended')
         break
     print('message from client: ', data)
 
     msg = time.ctime(time.time())
     con.sendall(bytes(msg.encode('ascii')))
-    
-
-    data = con.recv(1024)
-
-ss.close()
