@@ -9,6 +9,7 @@ ca = 0
 da = 0
 
 def stat():
+    global sa, da, ca
     re = 'statistical analysis :  '
     re = re +' server won with '+str(sa)+' client won with '+str(ca)+'  game draw with '+str(da)
     return re
@@ -31,15 +32,7 @@ def genRandom():
     x = random.randint(1, 9)
     return x
 
-ss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-print("Server Start")
-
-host = "127.0.0.1"
-port = 3000
-
-ss.bind((host, port))
-
-def handle_client(addr):
+def func(addr):
     global ss
     while True:
         con, addr = ss.recvfrom(1024)
@@ -60,6 +53,16 @@ def handle_client(addr):
         ss.sendto(str.encode(rr), addr)
         ss.sendto(str.encode(stat()), addr)
 
+ss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+print("Server Start")
+
+host = "127.0.0.1"
+port = 3000
+
+ss.bind((host, port))
+
+
+
 while True:
     con, addr = ss.recvfrom(1024)
     print(f"Client Joined: {addr}")
@@ -70,6 +73,6 @@ while True:
     msg = input("Message to client: ")
     ss.sendto(str.encode(msg), addr)
     
-    start_new_thread(handle_client, (addr,))
+    start_new_thread(func, (addr,))
     th = th + 1
     print(f'thread no: {th} and process id {os.getpid()}')
