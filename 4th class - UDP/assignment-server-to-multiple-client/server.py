@@ -10,7 +10,7 @@ def weekday(y, m, d):
     re = f'{re} of year {str(y)} month {str(m)} day {str(d)} is {r}'
     return re
 
-def client_handler(addr):
+def func(addr):
     global ss
     while True:
         con, addr = ss.recvfrom(1024)
@@ -48,4 +48,4 @@ while True:
     msg = input("Welcome message to client: ")
     ss.sendto(str.encode(msg), addr)
     
-    start_new_thread(client_handler, (addr,))
+    start_new_thread(func, (addr,))

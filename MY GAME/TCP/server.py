@@ -26,7 +26,7 @@ def hot_or_cold(treasure, guess):
         return "Cold (far)"
 
 def func(con):
-    treasure = get_treasure()  # Initialize the treasure
+    treasure = get_treasure()  
     print(f"Treasure hidden at: {treasure}")
     con.sendall(b"Welcome to the Hot or Cold Treasure Hunt!\nGuess the treasure (1-50):")
 
@@ -46,11 +46,12 @@ def func(con):
             continue
 
         response = hot_or_cold(treasure, client_guess)
-        con.sendall(bytes(f"Server: {response}\n".encode('ascii')))
+        con.sendall(bytes(response.encode('ascii')))
 
         if client_guess == treasure:
-            con.sendall(b"Congratulations! You found the treasure!\n")
             print("Client found the treasure!")
+            msg = 'Congratulations! You found the treasure!'
+            con.sendall(bytes(msg.encode('ascii')))
             break
 
         treasure = move_treasure(treasure)  
