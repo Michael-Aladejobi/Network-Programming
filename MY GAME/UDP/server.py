@@ -3,7 +3,7 @@ from _thread import *
 import os
 import random
 
-th = 0  # Thread counter
+th = 0  
 
 def get_treasure():
     res = random.randint(1, 50)
