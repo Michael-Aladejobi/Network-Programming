@@ -1,78 +1,68 @@
 import socket
-from _thread import *
+import threading
 import os
 import random
+
 
 th = 0
 sa = 0
 ca = 0
 da = 0
 
-def stat():
-    global sa, da, ca
-    re = 'statistical analysis :  '
-    re = re +' server won with '+str(sa)+' client won with '+str(ca)+'  game draw with '+str(da)
-    return re
+
+def genRandom():
+    return random.randint(1, 9)
+
 
 def whoWon(s, c):
     global sa, ca, da
-    r = ''
     if c > s:
-        r = r +' client won with '+str(c)+' as against server with  '+str(s)
-        ca = ca + 1
+        ca += 1
+        return f"Client won with {c} vs Server {s}"
     elif c == s:
-        r = r +' draw : client with '+str(c)+' equal server no with  '+str(s)
-        da = da + 1
+        da += 1
+        return f"Draw: Client {c} = Server {s}"
     else:
-        r = r + ' server won with ' + str(s) + ' as against client with  ' + str(c)
-        sa = sa + 1
-    return r
+        sa += 1
+        return f"Server won with {s} vs Client {c}"
 
-def genRandom():
-    x = random.randint(1, 9)
-    return x
 
-def func(addr):
-    global ss
-    while True:
-        con, addr = ss.recvfrom(1024)
-        data = con.decode()
-        
-        if not data or data == "bye":
-            print("End of operation")
-            break
+def stat():
+    return f"Statistical analysis: Server won: {sa}, Client won: {ca}, Draws: {da}"
 
-        print(f"Message from client: {data}\n")
-        cliNo = int(data)
-        serNo = genRandom()
-        
-        print(f'server no {serNo} and client no {cliNo}')
-        rr = whoWon(serNo, cliNo)
-        print(f'message to client {rr}')
-        
-        ss.sendto(str.encode(rr), addr)
-        ss.sendto(str.encode(stat()), addr)
+def handle_client(data, addr, server_socket):
+    try:
+        client_num = int(data)
+        server_num = genRandom()
+        print(f"[{addr}] Server No: {server_num}, Client No: {client_num}")
+
+        result = whoWon(server_num, client_num)
+        server_socket.sendto(result.encode(), addr)
+        server_socket.sendto(stat().encode(), addr)
+
+    except ValueError:
+        server_socket.sendto("Invalid input. Please send a number.".encode(), addr)
+
 
 ss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-print("Server Start")
-
 host = "127.0.0.1"
 port = 3000
-
 ss.bind((host, port))
 
-
+print("UDP Server started...")
 
 while True:
-    con, addr = ss.recvfrom(1024)
-    print(f"Client Joined: {addr}")
+    data, addr = ss.recvfrom(1024)
+    message = data.decode().strip()
+
+    if message.lower() == "bye":
+        print(f"[{addr}] ended session.")
+        ss.sendto("Session ended. Bye!".encode(), addr)
+        continue
+
+    print(f"[{addr}] Message from client: {message}")
+    thread = threading.Thread(target=handle_client, args=(message, addr, ss))
+    thread.start()
     
-    data = con.decode()
-    print(f"Message from client: {data}\n")
-    
-    msg = input("Message to client: ")
-    ss.sendto(str.encode(msg), addr)
-    
-    start_new_thread(func, (addr,))
-    th = th + 1
-    print(f'thread no: {th} and process id {os.getpid()}')
+    th += 1
+    print(f"Active threads: {th} | Process ID: {os.getpid()}")

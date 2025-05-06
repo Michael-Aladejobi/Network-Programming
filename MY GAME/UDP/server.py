@@ -35,12 +35,9 @@ def hot_or_cold(treasure, guess):
         return res
 
 
-def func(addr, data):
-   
-    global ss
+def func(addr, data, ss):
     global guess_count
 
-    
     if addr not in clients:
         treasure = get_treasure()
         clients[addr] = {"treasure": treasure, "guess_count": 0}
@@ -116,7 +113,7 @@ while True:
     data = con.decode().strip()
     print(f"Message from client: {data}")
 
-    threading.Thread(target=func, args=(addr, data)).start()
+    threading.Thread(target=func, args=(addr, data, ss)).start()
     
     th = th + 1
     print("Thread no.:", th)
