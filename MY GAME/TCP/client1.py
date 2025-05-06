@@ -15,8 +15,10 @@ msg = input('message to server: ')
 while True:
     if msg.lower().strip() != 'bye':
         cs.sendall(bytes(msg.encode('ascii')))
+
         data = cs.recv(1024).decode()
         print('message from server: ', data)
+        
         msg = input('message to server: ')
     else:
         print("Exiting game...")

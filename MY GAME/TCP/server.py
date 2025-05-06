@@ -3,11 +3,16 @@ from _thread import *
 import os
 import random
 
-th = 0  
+
+th = 0
+guess_count = 0
+max_guesses = 5  
+
 
 def get_treasure():
     res = random.randint(1, 50)
     return res
+
 
 def move_treasure(treasure):
     if treasure == 1:
@@ -18,35 +23,48 @@ def move_treasure(treasure):
         treasure = treasure + random.choice([-1, 1])
     return treasure
 
+
 def hot_or_cold(treasure, guess):
     distance = abs(treasure - guess)
     if distance <= 5:
-        return "Hot (close)"
+        res = "Hot (close)"
+        return res
     else:
-        return "Cold (far)"
+        res = "Cold (far)"
+        return res
 
 def func(con):
+    global guess_count
+    global max_guesses
+
     treasure = get_treasure()  
-    guess_count = 0
-    max_guesses = 5
+    
     print(f"Treasure hidden at: {treasure}")
-    con.sendall(b"Welcome to the Hot or Cold Treasure Hunt!\nYou have 5 guesses to find the treasure (1-50):")
+    msg = "Welcome to the Hot or Cold Treasure Hunt!\nYou have 5 guesses to find the treasure (1-50):"
+    con.sendall(bytes(msg.encode('ascii')))
 
     while True:
         data = con.recv(1024).decode()
+
         if not data:
             print("Game ended!")
             break
 
+        if data.lower().strip() == 'bye':
+            print('Game ended!')
+            break
+
         try:
             client_guess = int(data)
+
             if client_guess < 1 or client_guess > 50:
                 msg = "Invalid guess! Please guess a number between 1 and 50."
                 con.sendall(bytes(msg.encode('ascii')))
                 continue
 
         except ValueError:
-            con.sendall(b"Invalid input! Please enter a valid number.")
+            msg = "Invalid input! Please enter a valid number."
+            con.sendall(bytes(msg.encode('ascii')))
             continue
 
         guess_count = guess_count + 1
@@ -87,6 +105,8 @@ while True:
     print("Connected to addr {0}, port no. {1}".format(addr[0], addr[1]))
 
     start_new_thread(func, (con,))
+
     th = th + 1
     print("Thread no.: ", th)
+    
     print("Process ID: ", os.getpid())
