@@ -4,8 +4,8 @@ cs = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 print("Client Start...")
 
-host = "127.0.0.1"
-port = 7500
+host = socket.gethostname()
+port = 6000
 
 msg = input("Message to server: ")
 

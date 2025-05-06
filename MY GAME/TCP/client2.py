@@ -1,33 +1,25 @@
 import socket
 
-cs = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-print("Client Start")
+cs = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
+print('client start: ')
 
-host = "127.0.0.1"
-port = 9999  
+host = socket.gethostname()
+port = 6000
 
+cs.connect((host, port))
 
-cs.sendto(b"connect", (host, port))
-data, addr = cs.recvfrom(1024)
-print("Server:", data.decode())
+data = cs.recv(1024).decode()  
+print('message from server: ', data)
 
+msg = input('message to server: ')
 while True:
-    msg = input("Enter your guess (1-50) or 'bye' to quit: ")
-    
-    if msg.lower().strip() == 'bye':
-        cs.sendto(msg.encode(), (host, port))
+    if msg.lower().strip() != 'bye':
+        cs.sendall(bytes(msg.encode('ascii')))
+        data = cs.recv(1024).decode()
+        print('message from server: ', data)
+        msg = input('message to server: ')
+    else:
         print("Exiting game...")
         break
-    
-    cs.sendto(msg.encode(), (host, port))
-    
-    data, addr = cs.recvfrom(1024)
-    response = data.decode()
-    
-    if "Congratulations" in response or "Game over" in response:
-        print("\n" + response)
-        break
-    else:
-        print("Server response:", response)
 
 cs.close()

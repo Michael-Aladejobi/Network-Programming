@@ -4,7 +4,7 @@ cs = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 print('client start: ')
 
 host = socket.gethostname()
-port = 9999
+port = 6000
 
 cs.connect((host, port))
 

@@ -26,7 +26,7 @@ def hot_or_cold(treasure, guess):
         return "Cold (far)"
 
 def func(con):
-    treasure = get_treasure()  # Initialize the treasure
+    treasure = get_treasure()  
     guess_count = 0
     max_guesses = 5
     print(f"Treasure hidden at: {treasure}")
@@ -41,8 +41,10 @@ def func(con):
         try:
             client_guess = int(data)
             if client_guess < 1 or client_guess > 50:
-                con.sendall(b"Invalid guess! Please guess a number between 1 and 50.")
+                msg = "Invalid guess! Please guess a number between 1 and 50."
+                con.sendall(bytes(msg.encode('ascii')))
                 continue
+
         except ValueError:
             con.sendall(b"Invalid input! Please enter a valid number.")
             continue
@@ -51,13 +53,17 @@ def func(con):
         response = hot_or_cold(treasure, client_guess)
         
         if client_guess == treasure:
-            con.sendall(bytes(f"Congratulations! You found the treasure in {guess_count} guesses!\n".encode('ascii')))
+            msg = f"Congratulations! You found the treasure in {guess_count} guesses!"
+            con.sendall(bytes(msg.encode('ascii')))
             print("Client found the treasure!")
             break
+
         elif guess_count >= max_guesses:
-            con.sendall(bytes(f"Game over! Server wins. The treasure was at {treasure}\n".encode('ascii')))
+            msg = f"Game over! Server wins. The treasure was at {treasure}\n"
+            con.sendall(bytes(msg.encode('ascii')))
             print("Server won - client ran out of guesses")
             break
+        
         else:
             remaining = max_guesses - guess_count
             response = response + f"\nGuesses remaining: {remaining}"
@@ -71,7 +77,7 @@ ss = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 print("Server started:")
 
 host = socket.gethostname()
-port = 9999
+port = 6000
 
 ss.bind((host, port))
 ss.listen(5)

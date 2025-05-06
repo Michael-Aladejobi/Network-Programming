@@ -1,22 +1,21 @@
 import socket
-from _thread import *
+import threading
 import os
 import random
 
-th = 0  
+th = 0
+clients = {}
 
 def get_treasure():
-    res = random.randint(1, 50)
-    return res
+    return random.randint(1, 50)
 
 def move_treasure(treasure):
     if treasure == 1:
-        treasure = treasure + 1
+        return treasure + 1
     elif treasure == 50:
-        treasure = treasure - 1
+        return treasure - 1
     else:
-        treasure = treasure + random.choice([-1, 1])
-    return treasure
+        return treasure + random.choice([-1, 1])
 
 def hot_or_cold(treasure, guess):
     distance = abs(treasure - guess)
@@ -25,62 +24,65 @@ def hot_or_cold(treasure, guess):
     else:
         return "Cold (far)"
 
-def client_handler(addr):
-    global ss, th
-    treasure = get_treasure()
-    print(f"Treasure hidden at: {treasure} (Client: {addr})")
-    ss.sendto(b"Welcome to the Hot or Cold Treasure Hunt!\nGuess the treasure (1-50):", addr)
-    
-    while True:
-        try:
-            data, addr = ss.recvfrom(1024)
-            if not data:
-                print(f"Client {addr} disconnected")
-                break
-                
-            client_guess = int(data.decode())
-            if client_guess < 1 or client_guess > 50:
-                ss.sendto(b"Invalid guess! Please guess a number between 1 and 50.", addr)
-                continue
-                
-            response = hot_or_cold(treasure, client_guess)
-            ss.sendto(f"Server: {response}\n".encode('ascii'), addr)
-            
-            if client_guess == treasure:
-                ss.sendto(b"Congratulations! You found the treasure!\n", addr)
-                print(f"Client {addr} found the treasure!")
-                break
-                
-            treasure = move_treasure(treasure)
-            print(f"Treasure moved to: {treasure} (Client: {addr})")
-            
-        except ValueError:
-            ss.sendto(b"Invalid input! Please enter a valid number.", addr)
-        except Exception as e:
-            print(f"Error with {addr}: {str(e)}")
-            break
-    
-    th = th - 1
-    print(f"Client disconnected: {addr}")
+def func(addr, message):
+    global th
 
-ss = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-print("UDP Server started:")
+    if addr not in clients:
+        treasure = get_treasure()
+        clients[addr] = {"treasure": treasure, "guess_count": 0}
+        print(f"Treasure hidden at: {treasure} for {addr}")
+        ss.sendto(b"Welcome to the Hot or Cold Treasure Hunt!\nYou have 5 guesses to find the treasure (1-50):", addr)
+        return
+
+    try:
+        guess = int(message)
+        if guess < 1 or guess > 50:
+            ss.sendto(b"Invalid guess! Please guess a number between 1 and 50.", addr)
+            return
+    except:
+        ss.sendto(b"Invalid input! Please enter a number.", addr)
+        return
+
+    clients[addr]["guess_count"] += 1
+    treasure = clients[addr]["treasure"]
+    guess_count = clients[addr]["guess_count"]
+    max_guesses = 5
+
+    if guess == treasure:
+        ss.sendto(bytes(f"Congratulations! You found the treasure in {guess_count} guesses!\n".encode()), addr)
+        print(f"{addr} found the treasure!")
+        del clients[addr]
+    elif guess_count >= max_guesses:
+        ss.sendto(bytes(f"Game over! Server wins. The treasure was at {treasure}\n".encode()), addr)
+        print(f"Server wins - {addr} ran out of guesses.")
+        del clients[addr]
+    else:
+        response = hot_or_cold(treasure, guess)
+        remaining = max_guesses - guess_count
+
+        response += f"Guesses remaining: {remaining}"
+        ss.sendto(response.encode(), addr)
+
+        treasure = move_treasure(treasure)
+        clients[addr]["treasure"] = treasure
+        print(f"Treasure moved to: {treasure} for {addr}")
+
+ss = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+print("Server start: ")
 
 host = socket.gethostname()
 port = 9999
 
 ss.bind((host, port))
-print(f"Listening on {host}:{port}")
+print("Connected to host", host, ", port:", port)
 
-try:
-    while True:
-        data, addr = ss.recvfrom(1024)
-        print(f"New connection from {addr[0]}:{addr[1]}")
-        start_new_thread(client_handler, (addr,))
-        th = th + 1
-        print("Thread no.: ", th)
-        print("Process ID: ", os.getpid())
-except KeyboardInterrupt:
-    print("Server shutting down...")
-finally:
-    ss.close()
+while True:
+    data, addr = ss.recvfrom(1024)
+    msg = data.decode().strip()
+    print(f"Message from client: {msg}")
+
+    threading.Thread(target=func, args=(addr, msg)).start()
+    th += 1
+    
+    print("Thread no.:", th)
+    print("Process ID:", os.getpid())
