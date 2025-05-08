@@ -1,3 +1,0 @@
-Assignment:
-
-Think of a game between server and client and write it on paper (you don't need to implement it yet)
