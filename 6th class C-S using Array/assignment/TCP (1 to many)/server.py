@@ -173,7 +173,7 @@ def client_handler(con, addr):
 
 # Main server setup
 ss = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
-print("TCP Server started")
+print("Server started")
 
 host = socket.gethostname()
 port = 7000

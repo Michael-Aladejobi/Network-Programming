@@ -2,9 +2,19 @@ import socket
 import pickle
 import math
 import time
-from _thread import *
-
-
+import threading
+def is_prime(n):
+    if n <= 1:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    max_divisor = math.floor(math.sqrt(n)) + 1
+    for i in range(3, max_divisor, 2):
+        if n % i == 0:
+            return False
+    return True
 
 def calculate_sum(arr):
     total = 0
@@ -84,19 +94,6 @@ def binary_search(arr, target):
     end_time = time.time()
     return end_time - start_time
 
-def is_prime(n):
-    if n <= 1:
-        return False
-    if n == 2:
-        return True
-    if n % 2 == 0:
-        return False
-    max_divisor = math.floor(math.sqrt(n)) + 1
-    for i in range(3, max_divisor, 2):
-        if n % i == 0:
-            return False
-    return True
-
 def perform_operation(arr, op):
     result = ""
     if op == 's':
@@ -128,30 +125,6 @@ def perform_operation(arr, op):
                 non_primes.append(num)
         result = f"Primes: {primes}\nNon-primes: {non_primes}"
     
-    elif op == 'd':
-        index = int(input("Enter index to delete: "))
-        if 0 <= index < len(arr):
-            new_arr = []
-            for i in range(len(arr)):
-                if i != index:
-                    new_arr.append(arr[i])
-            arr = new_arr
-        result = f"New array: {arr}"
-    
-    elif op == 'i':
-        index = int(input("Enter index to insert: "))
-        value = int(input("Enter value to insert: "))
-        new_arr = []
-        for i in range(len(arr) + 1):
-            if i < index:
-                new_arr.append(arr[i])
-            elif i == index:
-                new_arr.append(value)
-            else:
-                new_arr.append(arr[i-1])
-        arr = new_arr
-        result = f"New array: {arr}"
-    
     elif op == 'e':
         evens = []
         odds = []
@@ -170,29 +143,36 @@ def perform_operation(arr, op):
 def client_handler(con, addr):
     print(f"Client connected: {addr[0]}:{addr[1]}")
     
-    data = con.recv(1024).decode()
-    print(f"Client message: {data}")
-    
-    con.sendall(b"Send array data")
-    
-    data_arr = con.recv(4096)
-    arr = pickle.loads(data_arr)
-    print(f"Received array: {arr}")
-    
-    while True:
-        op = con.recv(1024).decode()
-        if not op or op == 'q':
-            break
+    try:
+        # Initial handshake
+        data = con.recv(1024).decode()
+        print(f"Client message: {data}")
+        con.sendall(b"Send array data")
         
-        print(f"Operation requested: {op}")
-        result = perform_operation(arr, op)
-        con.sendall(str.encode(result))
-    
-    con.close()
-    print(f"Client disconnected: {addr[0]}:{addr[1]}")
+        # Receive array
+        data_arr = con.recv(4096)
+        arr = pickle.loads(data_arr)
+        print(f"Received array from {addr}: {arr}")
+        
+        # Operation loop
+        while True:
+            op = con.recv(1024).decode()
+            if not op or op == 'q':
+                break
+            
+            print(f"Operation from {addr}: {op}")
+            result = perform_operation(arr, op)
+            con.sendall(result.encode())
+            
+    except Exception as e:
+        print(f"Error with {addr}: {str(e)}")
+    finally:
+        con.close()
+        print(f"Client disconnected: {addr[0]}:{addr[1]}")
 
+# Main server setup
 ss = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
-print("Server started")
+print("TCP Server started")
 
 host = socket.gethostname()
 port = 7000
@@ -201,6 +181,11 @@ ss.bind((host, port))
 ss.listen(5)
 print(f"Listening on {host}:{port}")
 
-while True:
-    con, addr = ss.accept()
-    start_new_thread(client_handler, (con, addr))
+try:
+    while True:
+        con, addr = ss.accept()
+        threading.Thread(client_handler, (con, addr))
+except KeyboardInterrupt:
+    print("Server shutting down...")
+finally:
+    ss.close()
