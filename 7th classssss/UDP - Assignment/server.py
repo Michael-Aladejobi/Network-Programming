@@ -32,7 +32,7 @@ def pop(array, N, index, value):
         return False
     if ((value > array[index]) or (value < 0)):
         print('Impossible to subtract less value')
-        return False #[4,3,2,1] - [5, 2 2 1] = error
+        return False #[4,3,2,1] - [5, 2 2 1] == error
     else:
         array[index] = array[index] - value
         return True

@@ -47,9 +47,3 @@ while selected_index.strip().lower() != "bye":
 
 client_socket.sendto(b"bye", server_address)
 client_socket.close()
-
-
-
-
-
-
