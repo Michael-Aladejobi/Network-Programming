@@ -48,7 +48,7 @@ def func(con, addr, server_socket):
 
     if con.lower().strip() == "hello":
 
-         # Send game array
+         # Send game__ array
         server_socket.sendto(pickle.dumps(array), addr) 
         return
 
