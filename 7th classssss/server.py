@@ -103,7 +103,7 @@ while True:
         con.send(pickle.dumps(arr))
 
 
-    # who is the winner\----
+    # who is the winner\---->
     if isWinner(arr):
         con.send(b'win')
         print('server has won')
