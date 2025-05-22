@@ -3,9 +3,11 @@ import threading
 import os
 import random
 
-th = 0
+th = 0 
 guess_count = 0
 max_guesses = 5
+
+clients = {}
 
 def get_treasure():
     x = random.randint(1, 50)
@@ -13,7 +15,7 @@ def get_treasure():
 
 def move_treasure(treasure):
     if treasure == 1:
-        treasure = treasure + 1 
+        treasure = treasure + 1
         return treasure
     elif treasure == 50:
         treasure = treasure - 1
@@ -21,7 +23,7 @@ def move_treasure(treasure):
     else:
         treasure = treasure + random.choice([-1, 1])
         return treasure
-    
+
 def hot_or_cold(treasure, guess):
     distance = abs(treasure - guess)
     if distance <= 5:
@@ -30,94 +32,30 @@ def hot_or_cold(treasure, guess):
     else:
         res = "Cold (Far)"
         return res
-
+    
 def func(addr, data, ss):
     global guess_count
     global max_guesses
 
-    treasure = get_treasure()  
-    
-    print(f"Treasure hidden at: {treasure}")
-    msg = "Welcome to the Hot or Cold Treasure Hunt!\nYou have 5 guesses to find the treasure (1-50):"
+    treasure = get_treasure()
+    print(f'Treasure hidden at: {treasure}')
+
+    msg = 'Welcome to Hot or Close Treasure hunt Game. \n You only have 5 guesses: '
     msg = str.encode(msg)
     ss.sendto(msg, addr)
 
-
     while True:
-        con, addr = ss.recvfrom(1024)
-        data = con.recvfrom(1024).drcode()
-        
+        con, data = ss.recvfrom(1025)
+        print('Message from client b/f decoding: ', con)
+
+        data = con.decode()
+
         if not data:
-            print("Game ended!")
+            print('Game Ended!')
             break
 
         if data.lower().strip() == 'bye':
-            print('Game ended!')
+            print('Game Over!')
             break
 
-        try:
-            client_guess = int(data)
-
-            if client_guess < 1 or client_guess > 50:
-                msg = "Invalid guess! Please guess a number between 1 and 50."
-                msg = str.encode(msg)
-                ss.sendto(msg.encode(), addr)
-                continue
-
-        except ValueError:
-            msg = "Invalid input! Please enter a valid number."
-            msg = str.encode(msg)
-            ss.sendto(msg.encode(), addr)
-            continue
-
-        guess_count = guess_count + 1
-        response = hot_or_cold(treasure, client_guess)
-        
-        if client_guess == treasure:
-            msg = f"Congratulations! You found the treasure in {guess_count} guesses!"
-            msg = str.encode(msg)
-            ss.sendto(msg.encode(), addr)
-            print("Client found the treasure!")
-            break
-
-        elif guess_count >= max_guesses:
-            msg = f"Game over! Server wins. The treasure was at {treasure}\n"
-            msg = str.encode(msg)
-            ss.sendto(msg.encode(), addr)            
-            print("Server won - client ran out of guesses")
-            break
-        
-        else:
-            remaining = max_guesses - guess_count
-            response = response + f"\nGuesses remaining: {remaining}"
-            msg = str.encode(msg)
-            ss.sendto(msg.encode(), addr)            
-            treasure = move_treasure(treasure)
-            print(f"Treasure moved to: {treasure}")
-
-   
-
-    
-
-ss =socket.socket(socket.AF_INET, socket.SOCJ_DGRAM)
-print('Server start: ')
-
-host = socket.gethostname()
-port = 6000
-
-ss.bind((host, port))
-print(f"Connected to {host}, port: {port}")
-
-while True:
-    con, addr = ss.recvfrom(1024)
-    print('message from client b/f decoding: ', con)
-    data = con.decode()
-    print("message from client after decoding: ", data)
-
-    thread_start = threading.Thread(target=func, args=(addr, data, ss))
-    thread_start.start()
-
-    th = th + 1
-    print("Thread no: ", th)
-
-    print("Process ID: ", os.getpid())
+        client_guess
