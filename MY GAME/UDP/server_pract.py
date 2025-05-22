@@ -40,12 +40,13 @@ def func(addr, data, ss):
     print(f"Treasure hidden at: {treasure}")
     msg = "Welcome to the Hot or Cold Treasure Hunt!\nYou have 5 guesses to find the treasure (1-50):"
     msg = str.encode(msg)
-    ss.sendto(msg.encode(), addr)
+    ss.sendto(msg, addr)
 
 
     while True:
-        data = con.recv(1024).decode()
-
+        con, addr = ss.recvfrom(1024)
+        data = con.recvfrom(1024).drcode()
+        
         if not data:
             print("Game ended!")
             break
