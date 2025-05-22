@@ -83,14 +83,16 @@ def func(addr, data, ss):
         elif guess_count >= max_guesses:
             msg = f"Game over! Server wins. The treasure was at {treasure}\n"
             msg = str.encode(msg)
-            ss.sendto(msg.encode(), addr)            print("Server won - client ran out of guesses")
+            ss.sendto(msg.encode(), addr)            
+            print("Server won - client ran out of guesses")
             break
         
         else:
             remaining = max_guesses - guess_count
             response = response + f"\nGuesses remaining: {remaining}"
             msg = str.encode(msg)
-            ss.sendto(msg.encode(), addr)            treasure = move_treasure(treasure)
+            ss.sendto(msg.encode(), addr)            
+            treasure = move_treasure(treasure)
             print(f"Treasure moved to: {treasure}")
 
    
