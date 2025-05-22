@@ -18,7 +18,7 @@ def whoWon(s, c):
     global sa, ca, da
     if c > s:
         ca += 1
-        return f"Client won with {c} vs Server {s}"
+        return f"Client won , with {c} vs Server {s}"
     elif c == s:
         da += 1
         return f"Draw: Client {c} = Server {s}"
