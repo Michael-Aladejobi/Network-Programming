@@ -60,12 +60,14 @@ def func(addr, data, ss):
 
             if client_guess < 1 or client_guess > 50:
                 msg = "Invalid guess! Please guess a number between 1 and 50."
-                con.sendall(bytes(msg.encode('ascii')))
+                msg = str.encode(msg)
+                ss.sendto(msg.encode(), addr)
                 continue
 
         except ValueError:
             msg = "Invalid input! Please enter a valid number."
-            con.sendall(bytes(msg.encode('ascii')))
+            msg = str.encode(msg)
+            ss.sendto(msg.encode(), addr)
             continue
 
         guess_count = guess_count + 1
@@ -73,21 +75,22 @@ def func(addr, data, ss):
         
         if client_guess == treasure:
             msg = f"Congratulations! You found the treasure in {guess_count} guesses!"
-            con.sendall(bytes(msg.encode('ascii')))
+            msg = str.encode(msg)
+            ss.sendto(msg.encode(), addr)
             print("Client found the treasure!")
             break
 
         elif guess_count >= max_guesses:
             msg = f"Game over! Server wins. The treasure was at {treasure}\n"
-            con.sendall(bytes(msg.encode('ascii')))
-            print("Server won - client ran out of guesses")
+            msg = str.encode(msg)
+            ss.sendto(msg.encode(), addr)            print("Server won - client ran out of guesses")
             break
         
         else:
             remaining = max_guesses - guess_count
             response = response + f"\nGuesses remaining: {remaining}"
-            con.sendall(bytes(response.encode('ascii')))
-            treasure = move_treasure(treasure)
+            msg = str.encode(msg)
+            ss.sendto(msg.encode(), addr)            treasure = move_treasure(treasure)
             print(f"Treasure moved to: {treasure}")
 
    
