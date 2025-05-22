@@ -39,7 +39,9 @@ def func(addr, data, ss):
     
     print(f"Treasure hidden at: {treasure}")
     msg = "Welcome to the Hot or Cold Treasure Hunt!\nYou have 5 guesses to find the treasure (1-50):"
-    con.sendall(bytes(msg.encode('ascii')))
+    msg = str.encode(msg)
+    ss.sendto(msg.encode(), addr)
+
 
     while True:
         data = con.recv(1024).decode()
