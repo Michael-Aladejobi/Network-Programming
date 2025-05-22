@@ -37,12 +37,15 @@ def func(addr, data, ss):
     global guess_count
     global max_guesses
 
-    treasure = get_treasure()
-    print(f'Treasure hidden at: {treasure}')
+    if addr not in clients:
+        treasure = get_treasure()
+        clients[addr] = {"Treasure":treasure, "guess_count": 0}
+        print(f'Treasure hidden at: {treasure}')
 
-    msg = 'Welcome to Hot or Close Treasure hunt Game. \n You only have 5 guesses: '
-    msg = str.encode(msg)
-    ss.sendto(msg, addr)
+        msg = 'Welcome to Hot or Close Treasure hunt Game. \n You only have 5 guesses: '
+        msg = str.encode(msg)
+        ss.sendto(msg, addr)
+        return
 
     while True:
         con, data = ss.recvfrom(1025)
@@ -58,4 +61,35 @@ def func(addr, data, ss):
             print('Game Over!')
             break
 
-        client_guess
+        try:
+            client_guess = int(data)
+
+            if client_guess < 1 or client_guess > 50:
+                msg = 'Value out of bound! Enter 1 - 50: '
+                msg = str.encode(msg)
+                ss.sendto(msg, addr)
+                return
+        except ValueError:
+            msg = "Invalid Value: Please enter  1 - 50: "
+
+        guess_count = guess_count  + 1
+        clients[addr]["guess_count"] = guess_count
+
+        if client_guess == treasure:
+            msg = f"Congratulations! You found the reasure in {guess_count} guesses."
+            msg = str.encode(msg)
+            ss.sendto(msg, addr)
+            del clients[addr]
+        elif guess_count >= max_guesses:
+            msg = 'Server won, Client ran out of guesses!'
+            print(msg)
+            ss.sendto(msg, addr)
+            del clients[addr]
+            return
+        else:
+            remaining_guess = max_guesses - guess_count
+            result = hot_or_cold(treasure, client_guess)
+            msg =  f"{result} \n {remaining_guess}"
+            ss.sendto(msg.encode(), addr)
+
+            
