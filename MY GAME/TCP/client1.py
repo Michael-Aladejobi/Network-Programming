@@ -17,7 +17,7 @@ while True:
         cs.sendall(bytes(msg.encode('ascii')))
 
         data = cs.recv(1024).decode()
-        print('message from server: ', data)
+        print('message from server-->: ', data)
         
         msg = input('message to server: ')
     else:
