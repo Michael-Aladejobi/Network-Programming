@@ -3,7 +3,7 @@ import socket
 
 cs = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 print('Client start: ')
-host = socket.gethostname()
+host = "127.0.0.1"
 port = 6000
 cs.connect((host, port))
 msg = input('message to server : ')
