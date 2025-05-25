@@ -17,6 +17,9 @@ data = con.recv(2020)
 print('message from client before decoding: ', data)
 
 data = data.decode()
+
+
+
 print('message from client after decoding: ', data)
 
 msg = input('message to client: ')
