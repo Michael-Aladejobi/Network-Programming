@@ -1,20 +1,24 @@
 import socket
-import calendar
 import threading
 import os
+import calendar
 
 th = 0
 
 def weekday(y, m, d):
-    res = "Weekday of birthday: "
-    weekday = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"]
-    x = calendar.weekday(y, m, d)
-    re = weekday[x]
-    res = res + f" year {y}, month {m}, day{d} is {re}"
-    return res
+    res = 'Birthday of weekday of: '
+    wkd = ['mon', 'tue','wed','thur','fri','sat','sun']
+    wkd_index = calendar.weekday(y, m, d)
+    wkd_index_value = wkd[wkd_index]
+    res = res + f'year {str(y)}, month {str(m)}, day {str(d)}'
+    
+    return wkd_index_value
 
 def func(addr, data, ss):
-    msg = input('message to server: ')
+    con, addr = ss.recvfrom(1024)
+    print('message from client: ',con.decode())
+
+    msg = input('message to client: ')
     msg = str.encode(msg)
     ss.sendto(msg, addr)
 
@@ -22,39 +26,32 @@ def func(addr, data, ss):
         con, addr = ss.recvfrom(1024)
         data = con.decode()
 
-        if not data:
-            print('Session ended')
+        if not data or data.lower().strip() == 'bye':
+            print('Game ended')
             break
-        if data.lower().strip() == ' bye':
-            print('Session ended!')
-            break
+
         print('message from client: ', data)
+
         data = data.split(",")
-        yr = data[0]
+        yy = data[0]
         mm = data[1]
         dd = data[2]
 
-        res = weekday(yr, mm, dd)
-        print(res)
-        res = str.encode(res)
-        ss.sendto(res, addr)
+        wkd = weekday(yy, mm, dd)
+        print(wkd)
+        wkd = str.encode(wkd)
+        ss.sendto(wkd, addr)
 
 ss = socket.socket(family=socket.AF_INET, type = socket.SOCK_DGRAM)
 print('Server start: ')
 
-host = '127.0.0.1'
+host = socket.gethostname()
 port = 6000
 
 ss.bind((host, port))
 
 while True:
-    con, addr = ss.recvfrom(1024)
-    data = con.decode()
-    print('message from client: ', data)
+    data, addr = ss.recvfrom(1024)
+    print('Connected to addr {}'.format(addr))
 
-    threading.Thread(target = func, args=(addr, data, ss)).start()
-
-    th = th + 1
-    print("Thread no: ", th)
-
-    print("Process ID: ".format(os.getpid()))
+    threading.Thread(target=func, args=(addr, data, ss)).start()
