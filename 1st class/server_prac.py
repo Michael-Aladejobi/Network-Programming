@@ -24,11 +24,11 @@ while True:
     if not data:
         print("Game ended!")
         break
-    if data.lower().strip() != 'bye':
+    if data.lower().strip() == 'bye':
         print('Game ended')
         break
     print('message from client: ', data)
 
     msg = time.ctime(time.time()) 
     con.sendall(bytes(msg.encode('ascii')))
-    
+
