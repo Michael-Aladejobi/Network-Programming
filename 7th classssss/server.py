@@ -58,6 +58,7 @@ con.sendall(bytes(msg.encode('ascii')))
 genArray()
 print('Array Game: ', arr)
 data_array = pickle.dumps(arr)
+pickle.
 con.send(data_array)
 
 while True:

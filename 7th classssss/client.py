@@ -17,7 +17,7 @@ print(f'message from server: {data}')
 
 data = cs.recv(1024)
 data_array = pickle.loads(data)
-print('Array Game: ', data_array)
+print('Array Game: ', data_array)   
 
 # input index
 indexCli = input('enter index from 0 - 3: ')
