@@ -24,7 +24,7 @@ indexCli = input('enter index from 0 - 3: ')
 while indexCli.strip() != 'bye':
     cs.sendall(bytes(indexCli.encode('ascii')))
 
-    # input value
+    # input___ value
     valueCli = input('enter value from 1 - 9: ')
     cs.sendall(bytes(valueCli.encode('ascii')))
 
