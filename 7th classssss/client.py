@@ -19,7 +19,7 @@ data = cs.recv(1024)
 data_array = pickle.loads(data)
 print('Array Game: ', data_array)   
 
-# input index
+# input index-----
 indexCli = input('enter index from 0 - 3: ')
 while indexCli.strip() != 'bye':
     cs.sendall(bytes(indexCli.encode('ascii')))
